@@ -21,7 +21,9 @@ where
             None => panic!("right-hand side variable is undefined"),
         };
         let addition = lhs + rhs;
-        AVar { value: Some(addition) }
+        AVar {
+            value: Some(addition),
+        }
     }
 }
 
@@ -67,4 +69,3 @@ mod tests {
         let _ = &x + &y;
     }
 }
-
