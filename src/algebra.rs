@@ -1,17 +1,17 @@
 use std::ops::Add;
 
 #[derive(PartialEq, Debug)]
-struct AVa<T> {
+struct AVar<T> {
     value: Option<T>,
 }
 
-impl<'a, T> Add<&'a AVa<T>> for &'a AVa<T>
+impl<'a, T> Add<&'a AVar<T>> for &'a AVar<T>
 where
     &'a T: Add<Output = T>,
 {
-    type Output = AVa<T>;
+    type Output = AVar<T>;
 
-    fn add(self, rhs: &'a AVa<T>) -> Self::Output {
+    fn add(self, rhs: &'a AVar<T>) -> Self::Output {
         let lhs = match &self.value {
             Some(v) => v,
             None => panic!("left-hand side variable is undefined"),
@@ -21,7 +21,7 @@ where
             None => panic!("right-hand side variable is undefined"),
         };
         let addition = lhs + rhs;
-        AVa { value: Some(addition) }
+        AVar { value: Some(addition) }
     }
 }
 
@@ -30,33 +30,40 @@ mod tests {
     use super::*;
 
     #[test]
+    fn variable_equality() {
+        let x = AVar { value: Some(10) };
+        let y = AVar { value: Some(10) };
+        assert_eq!(x, y);
+    }
+
+    #[test]
     fn variable_addition() {
-        let x = AVa { value: Some(10) };
-        let y = AVa { value: Some(45) };
-        let z = AVa { value: Some(55) };
+        let x = AVar { value: Some(10) };
+        let y = AVar { value: Some(45) };
+        let z = AVar { value: Some(55) };
         assert_eq!(z, &x + &y);
     }
 
     #[test]
     fn variable_commutative_addition() {
-        let x = AVa { value: Some(10) };
-        let y = AVa { value: Some(45) };
+        let x = AVar { value: Some(10) };
+        let y = AVar { value: Some(45) };
         assert_eq!(&x + &y, &y + &x);
     }
 
     #[test]
     #[should_panic(expected = "left-hand side variable is undefined")]
     fn variable_addition_panics_with_undefined_lhs() {
-        let x: AVa<i32> = AVa { value: None };
-        let y = AVa { value: Some(45) };
+        let x: AVar<i32> = AVar { value: None };
+        let y = AVar { value: Some(45) };
         let _ = &x + &y;
     }
 
     #[test]
     #[should_panic(expected = "right-hand side variable is undefined")]
     fn variable_addition_panics_with_undefined_rhs() {
-        let x = AVa { value: Some(45) };
-        let y: AVa<i32> = AVa { value: None };
+        let x = AVar { value: Some(45) };
+        let y: AVar<i32> = AVar { value: None };
         let _ = &x + &y;
     }
 }
