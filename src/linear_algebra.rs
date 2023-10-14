@@ -1,5 +1,5 @@
-use std::ops::Add;
 use std::iter::zip;
+use std::ops::Add;
 
 #[derive(PartialEq, Debug)]
 struct LVec<T> {
@@ -16,9 +16,7 @@ where
         if self.values.len() != rhs.values.len() {
             panic!("vectors with different dimensionality");
         }
-        let values = zip(&self.values, &rhs.values)
-            .map(|(x, y)| x + y)
-            .collect();
+        let values = zip(&self.values, &rhs.values).map(|(x, y)| x + y).collect();
         LVec { values }
     }
 }
@@ -29,25 +27,36 @@ mod tests {
 
     #[test]
     fn linear_vector_addition() {
-        let x = LVec { values: vec![1, 2, 3] };
-        let y = LVec { values: vec![4, 5, 6] };
-        let z = LVec { values: vec![5, 7, 9] };
+        let x = LVec {
+            values: vec![1, 2, 3],
+        };
+        let y = LVec {
+            values: vec![4, 5, 6],
+        };
+        let z = LVec {
+            values: vec![5, 7, 9],
+        };
         assert_eq!(z, &x + &y);
     }
 
     #[test]
     #[should_panic(expected = "vectors with different dimensionality")]
     fn linear_vector_addition_panics() {
-        let x = LVec { values: vec![1, 2, 3] };
+        let x = LVec {
+            values: vec![1, 2, 3],
+        };
         let y = LVec { values: vec![4, 5] };
         let _ = &x + &y;
     }
 
     #[test]
     fn linear_vector_commutative_addition() {
-        let x = LVec { values: vec![1, 2, 3] };
-        let y = LVec { values: vec![4, 5, 6] };
+        let x = LVec {
+            values: vec![1, 2, 3],
+        };
+        let y = LVec {
+            values: vec![4, 5, 6],
+        };
         assert_eq!(&x + &y, &y + &x);
     }
 }
-
